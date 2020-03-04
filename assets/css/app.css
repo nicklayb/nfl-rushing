@@ -1,3 +1,30 @@
 /* This file is for your main application css. */
 
-@import "./phoenix.css";
+@import "../node_modules/bulma/css/bulma.css";
+
+.loading {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: #ececec99;
+  text-align: center;
+  padding: 1rem;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.sortable::after {
+  content: "⭥";
+  margin-left: 6px;
+  color: #a8a8a8;
+}
+
+.sortable.sorted-asc::after {
+  content: "⭡";
+  color: black;
+}
+
+.sortable.sorted-desc::after {
+  content: "⭣";
+  color: black;
+}

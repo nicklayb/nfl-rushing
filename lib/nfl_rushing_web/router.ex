@@ -18,4 +18,10 @@ defmodule NflRushingWeb.Router do
 
     get "/", WebappController, :index
   end
+
+  scope "/api", NflRushingWeb do
+    pipe_through :api
+
+    get "/players", PlayerController, :index
+  end
 end

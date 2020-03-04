@@ -1,63 +1,42 @@
 defmodule NflRushing.Players do
   use Agent
-  alias NflRushing.{Player, PlayerImport, Utils}
+  alias NflRushing.{Player, PlayerRepository, PlayerImport}
 
+  @doc """
+  Starts the Players Agent
+  """
+  @spec start_link(any) :: {:error, any} | {:ok, pid}
   def start_link(_) do
     Agent.start_link(&read_json!/0, name: __MODULE__)
   end
 
+  @doc """
+  Loads the `rushing.json` file in the agent.
+
+  Is run by default when starting the agent but can be manually called to refresh the records
+  """
+  @spec load :: :ok
   def load do
     Agent.update(__MODULE__, fn _ -> read_json!() end)
   end
 
-  @filter "search"
-  @sort "sort"
-  @authorized_sort ~w(yards rushing_touchdowns longest_rush)a
-  def fetch(params) do
-    Agent.get(__MODULE__, fn players ->
-      players
-      |> Enum.filter(&filter(&1, Map.get(params, @filter, nil)))
-      |> sort(get_sort_param(params))
-    end)
+  @doc """
+  Gets the first player from the store.
+
+  Returns nil if no player has been loaded
+  """
+  @spec first :: Player.t() | nil
+  def first() do
+    Agent.get(__MODULE__, &List.first/1)
   end
 
-  defp get_sort_param(params) do
-    case Map.get(params, @sort, nil) do
-      nil -> nil
-      column when column not in @authorized_sort -> nil
-      "-" <> column -> {column, :desc}
-      column -> {column, :asc}
-    end
-  end
+  @doc """
+  Fetches players according to given filters in the store.
 
-  defp sort(players, nil), do: players
-
-  defp sort(players, {column, ordering}) do
-    Enum.sort(players, fn first, second ->
-      [first, second] = Enum.map([first, second], &get_sort_column(&1, column))
-
-      case ordering do
-        :asc -> first < second
-        :desc -> first > second
-      end
-    end)
-  end
-
-  defp get_sort_column(%Player{longest_rush: longest_rush}, :longest_rush)
-       when is_bitstring(longest_rush) do
-    longest_rush
-    |> String.replace(~r/[0-9]/, "")
-    |> String.to_integer()
-  end
-
-  defp get_sort_column(player, column), do: Map.get(player, column, 0)
-
-  defp filter(player, nil), do: player
-
-  defp filter(player, value) do
-    player.name
-    |> String.downcase()
-    |> String.contains?(String.downcase(value))
+  See PlayerRepository.all/2 for more details about filtering
+  """
+  def fetch(params \\ %{}) do
+    Agent.get(__MODULE__, &PlayerRepository.all(&1, params))
   end
 
   defp read_json!() do

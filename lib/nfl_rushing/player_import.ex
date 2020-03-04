@@ -3,6 +3,9 @@ defmodule NflRushing.PlayerImport do
 
   defp init_struct(), do: %Player{}
 
+  @doc """
+  Casts a list of map to a list of Player
+  """
   @spec import_from(maybe_improper_list | map) :: [Player.t()] | Player.t()
   def import_from(list) when is_list(list), do: Enum.map(list, &import_from/1)
 

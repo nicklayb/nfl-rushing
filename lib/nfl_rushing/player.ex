@@ -1,4 +1,5 @@
 defmodule NflRushing.Player do
+  @derive Jason.Encoder
   defstruct name: nil,
             team: nil,
             position: nil,
@@ -14,4 +15,14 @@ defmodule NflRushing.Player do
             rushing_plus_20: nil,
             rushing_plus_40: nil,
             fumbles: nil
+
+  alias NflRushing.Player
+
+  def matches?(%Player{} = player, string) do
+    lower = String.downcase(string)
+
+    player.name
+    |> String.downcase()
+    |> String.contains?(lower)
+  end
 end

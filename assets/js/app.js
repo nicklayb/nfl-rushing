@@ -1,9 +1,9 @@
-import "bulma/css/bulma.css"
+import "../css/app.css"
 import "phoenix_html"
-import Table from './Table'
+import PlayerList from './PlayerList'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
 const ROOT_NODE = 'reactRoot'
 
-ReactDOM.render(<Table />, document.getElementById(ROOT_NODE))
+ReactDOM.render(<PlayerList />, document.getElementById(ROOT_NODE))
