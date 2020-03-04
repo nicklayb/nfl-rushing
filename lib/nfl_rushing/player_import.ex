@@ -63,6 +63,38 @@ defmodule NflRushing.PlayerImport do
     end)
   end
 
+  @doc """
+  Converts a player structure to serializable map
+  """
+  @spec export_to([Player.t()] | Player.t()) :: any
+  def export_to(list) when is_list(list), do: Enum.map(list, &export_to/1)
+
+  def export_to(%Player{} = player) do
+    Enum.reduce(cells(), %{}, fn {field, key}, acc ->
+      Map.put(acc, key, Map.get(player, field, ""))
+    end)
+  end
+
+  defp cells do
+    [
+      name: "Player",
+      team: "Team",
+      position: "Pos",
+      attempts: "Att",
+      attempts_per_game: "Att/G",
+      yards: "Yds",
+      average: "Avg",
+      yards_per_game: "Yds/G",
+      rushing_touchdowns: "TD",
+      longest_rush: "Lng",
+      first_downs: "1st",
+      first_downs_percent: "1st%",
+      rushing_plus_20: "20+",
+      rushing_plus_40: "40+",
+      fumbles: "FUM",
+    ]
+  end
+
   defp read_int(value) when is_integer(value), do: value
 
   defp read_int(value), do: String.to_integer(String.replace(value, ~r/[^0-9]/, ""))

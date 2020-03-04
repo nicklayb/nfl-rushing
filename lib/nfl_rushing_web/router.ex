@@ -23,5 +23,6 @@ defmodule NflRushingWeb.Router do
     pipe_through :api
 
     get "/players", PlayerController, :index
+    get "/players/export", PlayerController, :export
   end
 end

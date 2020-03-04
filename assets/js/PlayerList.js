@@ -1,5 +1,5 @@
 import React from 'react'
-import { usePlayers } from './usePlayers'
+import { usePlayers, usePlayerExport, downloadUrl } from './usePlayers'
 import { Table } from './Table'
 import { useDebounce } from 'use-debounce'
 import Loading from './Loading'
@@ -37,10 +37,14 @@ const PlayerList = () => {
   const [search, setSearch] = React.useState('')
   const [sort, setSort] = React.useState(null)
   const [debouncedSearch] = useDebounce(search, DEBOUNCE_TIME)
-  const { players, isLoading, setIsLoading } = usePlayers({
+  const getParams = () => ({
     search: debouncedSearch,
     sort
   })
+
+  const { players, isLoading, setIsLoading } = usePlayers(getParams())
+
+  const getExportUrl = () => downloadUrl(getParams())
 
   React.useEffect(() => {
     if (!isLoading) {
@@ -50,20 +54,31 @@ const PlayerList = () => {
 
   return (
     <div className='container'>
-      <div className='columns'>
-        <div className='column'>
-          <input className='input' placeholder='Search by name' value={search} onChange={({ target }) => setSearch(target.value)} />
+      <div className='section'>
+        <div className='columns'>
+          <div className='column'>
+            <div className="field has-addons">
+              <div className="control is-expanded">
+                <input className='input' placeholder='Search by name' value={search} onChange={({ target }) => setSearch(target.value)} />
+              </div>
+              <div className="control">
+                <a className='button is-primary' href={getExportUrl()} target="_blank">
+                  Export
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className='columns'>
-        <div className='column'>
-          {isLoading && <Loading />}
-          <Table
-            rows={players}
-            columns={TABLE_COLUMNS}
-            sort={sort}
-            onSort={newSort => setSort(newSort)}
-          />
+        <div className='columns'>
+          <div className='column'>
+            {isLoading && <Loading />}
+            <Table
+              rows={players}
+              columns={TABLE_COLUMNS}
+              sort={sort}
+              onSort={newSort => setSort(newSort)}
+            />
+          </div>
         </div>
       </div>
     </div>

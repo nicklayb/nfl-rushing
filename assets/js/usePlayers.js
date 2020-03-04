@@ -11,6 +11,11 @@ const fetchPlayers = (params) => {
   return fetch(url).then(response => response.json())
 }
 
+export const downloadUrl = (params) => queryString.stringifyUrl({
+  url: `${URL}/export`,
+  query: params
+})
+
 const DEFAULT = {
   search: '',
   sort: null,
