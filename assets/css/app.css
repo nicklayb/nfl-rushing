@@ -13,6 +13,14 @@
   font-weight: bold;
 }
 
+td:first-child {
+  font-weight: bold;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
 .sortable::after {
   content: "⭥";
   margin-left: 6px;

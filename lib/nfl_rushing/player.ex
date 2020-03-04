@@ -18,6 +18,12 @@ defmodule NflRushing.Player do
 
   alias NflRushing.Player
 
+  @doc """
+  Checkes if a player matches a string query
+
+  At the moment, it only checks for the case insensitive name
+  """
+  @spec matches?(NflRushing.Player.t(), binary) :: boolean
   def matches?(%Player{} = player, string) do
     lower = String.downcase(string)
 
