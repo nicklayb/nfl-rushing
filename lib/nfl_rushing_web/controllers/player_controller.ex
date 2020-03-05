@@ -2,13 +2,22 @@ defmodule NflRushingWeb.PlayerController do
   use NflRushingWeb, :controller
   alias NflRushing.{PlayerImport, Players}
 
+
+  @doc """
+  Returns a list of players filtered by params
+  """
+  @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
   def index(conn, params) do
     players = Players.fetch(params)
 
     render(conn, "index.json", %{players: players})
   end
 
+  @doc """
+  Exports a list of players filtered by params in CSV format
+  """
   @filename "players.csv"
+  @spec export(Plug.Conn.t(), map) :: Plug.Conn.t()
   def export(conn, params) do
     csv =
       params

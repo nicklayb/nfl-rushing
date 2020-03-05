@@ -97,7 +97,7 @@ defmodule NflRushing.PlayerImport do
 
   defp read_int(value) when is_integer(value), do: value
 
-  defp read_int(value), do: String.to_integer(String.replace(value, ~r/[^0-9]/, ""))
+  defp read_int(value), do: String.to_integer(String.replace(value, ~r/[^0-9\-]/, ""))
 
   defp read_float(value) when is_float(value), do: value
   defp read_float(value) when is_integer(value), do: value / 1
