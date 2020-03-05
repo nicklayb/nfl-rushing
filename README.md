@@ -37,7 +37,7 @@ In this repo is a sample data file [`rushing.json`](/rushing.json).
     2. The user should be able to sort the players by _Total Rushing Yards_, _Longest Rush_ and _Total Rushing Touchdowns_
     3. The user should be able to filter by the player's name
     4. The user should be able to download the sorted data as a CSV, as well as a filtered subset
-    
+
 2. The system should be able to potentially support larger sets of data on the order of 10k records.
 
 3. Update the section `Installation and running this solution` in the README file explaining how to run your code
@@ -54,4 +54,17 @@ We will evaluate you on your ability to solve the problem defined in the require
 If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
 
 ### Installation and running this solution
-... TODO
+
+#### Requirements
+
+- `make`: Used to run make targets that starts the app
+- `docker`: The application si built and run by docker. This helps running the application on different system or Elixir installed version.
+
+#### Start the application
+
+```sh
+make foreground # Starts the application in foreground
+make background # Starts the application in background
+```
+
+If you started the app in background, you can start an iex shell in it by running `make remote-console`. Once you want to stop the background process, simply run `make kill`.

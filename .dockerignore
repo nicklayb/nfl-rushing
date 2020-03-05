@@ -1,0 +1,6 @@
+.elixir_ls
+_build
+deps
+Makefile
+base.mk
+assets/node_modules

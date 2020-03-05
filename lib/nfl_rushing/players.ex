@@ -1,13 +1,18 @@
 defmodule NflRushing.Players do
   use Agent
   alias NflRushing.{Player, PlayerRepository, PlayerImport}
+  require Logger
 
   @doc """
   Starts the Players Agent
   """
   @spec start_link(any) :: {:error, any} | {:ok, pid}
   def start_link(_) do
-    Agent.start_link(&read_json!/0, name: __MODULE__)
+    Agent.start_link(fn () ->
+      values = read_json!()
+      Logger.log(:info, "#{__MODULE__} started with #{Enum.count(values)} records")
+      values
+    end, name: __MODULE__)
   end
 
   @doc """

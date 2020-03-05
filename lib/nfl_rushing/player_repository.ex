@@ -14,7 +14,7 @@ defmodule NflRushing.PlayerRepository do
   @skip "skip"
   @take "take"
   @authorized_sort ~w(yards rushing_touchdowns longest_rush)
-  @spec all([Player.t()], map) :: [Player.t()]
+  @spec all([NflRushing.Player.t()], map) :: [NflRushing.Player.t()]
   def all(players, params \\ %{}) do
     players
     |> Enum.filter(&filter(&1, Map.get(params, @filter, nil)))

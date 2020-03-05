@@ -6,7 +6,7 @@ defmodule NflRushing.PlayerImport do
   @doc """
   Casts a list of map to a list of Player
   """
-  @spec import_from(maybe_improper_list | map) :: [Player.t()] | Player.t()
+  @spec import_from(maybe_improper_list | map) :: [NflRushing.Player.t()] | NflRushing.Player.t()
   def import_from(list) when is_list(list), do: Enum.map(list, &import_from/1)
 
   def import_from(map) when is_map(map) do
@@ -66,7 +66,7 @@ defmodule NflRushing.PlayerImport do
   @doc """
   Converts a player structure to serializable map
   """
-  @spec export_to([Player.t()] | Player.t()) :: any
+  @spec export_to([NflRushing.Player.t()] | NflRushing.Player.t()) :: any
   def export_to(list) when is_list(list), do: Enum.map(list, &export_to/1)
 
   def export_to(%Player{} = player) do
