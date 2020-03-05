@@ -103,3 +103,7 @@ If the process running the Agent crashes, it'll be automatically restarted by th
 Since I know it, React has always been my goto library for writing user interfaces. It's powerful, well written, has a lots of powerful features such Context API and Hooks and it makes UI fun to write.
 
 I almost went for a Phoenix LiveView UI but I prefered to use a tech that I'm more used to.
+
+##### OTP release
+
+Inside the docker image is a OTP release of the application. It is built through a multi stage dockerfile so the final built image weighs ~40MB.
