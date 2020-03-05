@@ -19,10 +19,9 @@ defmodule NflRushing.PlayerRepository do
 
   defp get_sort_param(params) do
     case Map.get(params, @sort, nil) do
-      nil -> nil
-      column when column not in @authorized_sort -> nil
-      "-" <> column -> {column, :desc}
-      column -> {column, :asc}
+      column when column in @authorized_sort -> {column, :asc}
+      "-" <> column when column in @authorized_sort -> {column, :desc}
+      _ -> nil
     end
   end
 
@@ -32,7 +31,6 @@ defmodule NflRushing.PlayerRepository do
     do: sort(players, {String.to_atom(column), ordering})
 
   defp sort(players, {column, ordering}) do
-    IO.inspect({column, ordering})
     Enum.sort(players, fn first, second ->
       [first, second] = Enum.map([first, second], &get_sort_column(&1, column))
 
@@ -46,7 +44,7 @@ defmodule NflRushing.PlayerRepository do
   defp get_sort_column(%Player{longest_rush: longest_rush}, :longest_rush)
        when is_bitstring(longest_rush) do
     longest_rush
-    |> String.replace(~r/[^0-9]/, "")
+    |> String.replace(~r/[^0-9\-]/, "")
     |> String.to_integer()
   end
 

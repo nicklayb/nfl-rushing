@@ -1,5 +1,6 @@
 import React from 'react'
 import queryString from 'query-string'
+import usePlayersFilters from './usePlayersFilters'
 
 const URL = "/api/players"
 
@@ -16,16 +17,11 @@ export const downloadUrl = (params) => queryString.stringifyUrl({
   query: params
 })
 
-const DEFAULT = {
-  search: '',
-  sort: null,
-}
-
-export const usePlayers = (params = DEFAULT) => {
+export const usePlayers = () => {
   const [players, setPlayers] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(false)
 
-  const update = () => {
+  const update = (params) => {
     setIsLoading(true)
 
     fetchPlayers(params)
@@ -33,9 +29,23 @@ export const usePlayers = (params = DEFAULT) => {
       .finally(() => { setIsLoading(false) })
   }
 
-  React.useEffect(() => {
-    update()
-  }, [params.search, params.sort])
+  return { players, isLoading, setIsLoading, update }
+}
 
-  return { players, isLoading, setIsLoading }
+export const Context = React.createContext(null)
+
+export const Provider = ({ children }) => {
+  const state = usePlayers()
+  const filters = usePlayersFilters()
+  const { search, sort } = filters
+
+  React.useEffect(() => {
+    state.update({ search, sort })
+  }, [search, sort])
+
+  return (
+    <Context.Provider value={{ state, filters }}>
+      {children}
+    </Context.Provider>
+  )
 }
