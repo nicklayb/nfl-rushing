@@ -38,17 +38,17 @@ const PlayersFilters = () => {
 
   return (
     <div className='column'>
-      <div className="field has-addons">
-        <div className="control is-expanded">
+      <div className='field has-addons'>
+        <div className='control is-expanded'>
           <input className='input' placeholder='Search by name' value={search} onChange={({ target }) => setSearch(target.value)} />
         </div>
-        <div className="control">
+        <div className='control'>
           <PerPageSelect value={filters.perPage} onChange={filters.setPerPage} />
         </div>
-        <div className="control">
-          <a className='button is-primary' href={getExportUrl()} target="_blank">Export</a>
+        <div className='control'>
+          <a className='button is-primary' href={getExportUrl()} target='_blank'>Export</a>
         </div>
-        <div className="control">
+        <div className='control'>
           <button
             className='button is-info'
             onClick={() => filters.prevPage()}
@@ -57,10 +57,10 @@ const PlayersFilters = () => {
             {'<'}
           </button>
         </div>
-        <div className="control">
+        <div className='control'>
           <button className='button is-info' disabled={true}> {filters.currentPage + 1} </button>
         </div>
-        <div className="control">
+        <div className='control'>
           <button
             className='button is-info'
             onClick={() => filters.nextPage(state.players.length)}
