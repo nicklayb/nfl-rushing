@@ -68,3 +68,38 @@ make background # Starts the application in background
 ```
 
 If you started the app in background, you can start an iex shell in it by running `make remote-console`. Once you want to stop the background process, simply run `make kill`.
+
+#### Open the application
+
+Open your favorite browser at `http://localhost:4000` and you should see the table of records
+
+
+#### Decisions and explanation
+
+##### Pagination
+
+You might notice that the table is paginated. Even though the challenge specs does not have any requirement about paginating the data, it does states the following:
+
+> 2. The system should be able to potentially support larger sets of data on the order of 10k records.
+
+Therefore, displaying 10k+ records in a single web page is pretty heavy for a browser.
+
+But, the specs also states the following
+
+> 4. The user should be able to download the sorted data as a CSV, as well as a filtered subset
+
+So you can select "All records" in the per page select to have the whole list of players.
+
+##### Loading the json in an Agent
+
+Eventually, if we were to have relations with this set of data, maybe a database would do a better job.
+
+The Agent is started with the server and loads the data in memory under the supervision tree of the application. Which means that the whole data is available, straight from the ram and from another Erlang process.
+
+If the process running the Agent crashes, it'll be automatically restarted by the supervisor. You can easily test it by killing the PID manually or through the Observer.
+
+##### React as a frontend for a such simple task
+
+Since I know it, React has always been my goto library for writing user interfaces. It's powerful, well written, has a lots of powerful features such Context API and Hooks and it makes UI fun to write.
+
+I almost went for a Phoenix LiveView UI but I prefered to use a tech that I'm more used to.

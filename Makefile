@@ -2,10 +2,11 @@ NAME=nicklayb_nflrushing
 IMAGE_TAG=nicklayb/nflrushing:latest
 BUNDLE=/opt/rel/nfl_rushing/bin/nfl_rushing
 PORTS=-p 4000:4000
+DOCKERFILE=./dockerfiles/release.dockerfile
 
 .PHONY: docker-build
 docker-build:
-	docker build -t $(IMAGE_TAG) -f ./dockerfiles/release.dockerfile .
+	docker build -t $(IMAGE_TAG) -f $(DOCKERFILE) .
 
 .PHONY: foreground
 foreground: docker-build
@@ -14,6 +15,10 @@ foreground: docker-build
 .PHONY: background
 background: docker-build
 	docker run $(PORTS) --name $(NAME) -d $(IMAGE_TAG)
+
+.PHONY: rebuild
+rebuild:
+	docker build -t $(IMAGE_TAG) -f $(DOCKERFILE) --no-cache .
 
 .PHONY: kill
 kill:

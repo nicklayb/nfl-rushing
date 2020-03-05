@@ -4,11 +4,16 @@ import { Context, downloadUrl } from './usePlayers'
 
 const DEBOUNCE_TIME = 500
 
+const perPageLabel = perPage =>
+  perPage > 0
+    ? `${perPage} per page`
+    : `All records`
+
 const PerPageSelect = ({ value, onChange }) => (
   <div className='select'>
     <select value={value} onChange={({ target }) => onChange(parseInt(target.value, 10))}>
-      {[10, 25, 50, 100].map(amount => (
-        <option key={amount} value={amount}>{`${amount} per page`}</option>
+      {[0, 10, 25, 50, 100].map(amount => (
+        <option key={amount} value={amount}>{perPageLabel(amount)}</option>
       ))}
     </select>
   </div>

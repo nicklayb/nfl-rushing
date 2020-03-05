@@ -6,8 +6,9 @@ const usePlayersFilters = (defaultPerPage = 10) => {
   const [perPage, setPerPage] = React.useState(defaultPerPage)
   const [currentPage, setCurrentPage] = React.useState(0)
 
-  const hasNextPage = (rowCount) => perPage === rowCount
-  const hasPrevPage = () => currentPage > 0
+  const paginationEnabled = perPage > 0
+  const hasNextPage = (rowCount) => paginationEnabled && perPage === rowCount
+  const hasPrevPage = () => paginationEnabled && currentPage > 0
   const skip = currentPage * perPage
 
   return {
@@ -34,7 +35,12 @@ const usePlayersFilters = (defaultPerPage = 10) => {
         setCurrentPage(currentPage - 1)
       }
     },
-    requestParams: { search, sort, take: perPage, skip },
+    requestParams: {
+      search,
+      sort,
+      take: paginationEnabled ? perPage : null,
+      skip: paginationEnabled ? skip : null
+    },
   }
 }
 
