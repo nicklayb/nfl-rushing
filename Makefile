@@ -28,3 +28,7 @@ kill:
 .PHONY: remote-console
 remote-console:
 	docker exec -it $(NAME) $(BUNDLE) remote
+
+.PHONY: test
+test:
+	MIX_ENV=test mix test
