@@ -6,15 +6,37 @@ defmodule NflRushing.PlayerRepository do
   Parameters can be a map with string keys with the following keys:
   - "search": Search filter that matches player name
   - "sort": Columns to use for sorting the results. If the column is prefixed by a `-`, the results will be descending.
+  - "take": Amount of records to select
+  - "skip": Offset for selecting the rows
   """
   @filter "search"
   @sort "sort"
+  @skip "skip"
+  @take "take"
   @authorized_sort ~w(yards rushing_touchdowns longest_rush)
   @spec all([Player.t()], map) :: [Player.t()]
   def all(players, params \\ %{}) do
     players
     |> Enum.filter(&filter(&1, Map.get(params, @filter, nil)))
     |> sort(get_sort_param(params))
+    |> paginate({get_int_param(params, @skip), get_int_param(params, @take)})
+  end
+
+  defp paginate(players, {nil, nil}), do: players
+  defp paginate(players, {skip, take}) do
+    skip = if not is_nil(skip), do: skip, else: 0
+    take = if not is_nil(take), do: take, else: Enum.count(players)
+
+    Enum.slice(players, skip, take)
+  end
+
+  defp get_int_param(params, key), do: get_int_param(Map.get(params, key))
+  defp get_int_param(nil), do: nil
+  defp get_int_param(int) when is_integer(int), do: int
+  defp get_int_param(string) when is_bitstring(string) do
+    String.to_integer(string)
+  rescue
+    _ -> nil
   end
 
   defp get_sort_param(params) do

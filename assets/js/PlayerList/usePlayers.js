@@ -37,11 +37,11 @@ export const Context = React.createContext(null)
 export const Provider = ({ children }) => {
   const state = usePlayers()
   const filters = usePlayersFilters()
-  const { search, sort } = filters
+  const { search, sort, perPage, currentPage } = filters
 
   React.useEffect(() => {
-    state.update({ search, sort })
-  }, [search, sort])
+    state.update(filters.requestParams)
+  }, [search, sort, perPage, currentPage])
 
   return (
     <Context.Provider value={{ state, filters }}>

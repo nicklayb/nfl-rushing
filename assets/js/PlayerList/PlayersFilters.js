@@ -4,6 +4,16 @@ import { Context, downloadUrl } from './usePlayers'
 
 const DEBOUNCE_TIME = 500
 
+const PerPageSelect = ({ value, onChange }) => (
+  <div className='select'>
+    <select value={value} onChange={({ target }) => onChange(parseInt(target.value, 10))}>
+      {[10, 25, 50, 100].map(amount => (
+        <option key={amount} value={amount}>{`${amount} per page`}</option>
+      ))}
+    </select>
+  </div>
+)
+
 const PlayersFilters = () => {
   const [search, setSearch] = React.useState('')
   const [debouncedSearch] = useDebounce(search, DEBOUNCE_TIME)
@@ -13,7 +23,7 @@ const PlayersFilters = () => {
     filters.setSearch(debouncedSearch)
   }, [debouncedSearch])
 
-  const getExportUrl = () => downloadUrl(filters)
+  const getExportUrl = () => downloadUrl(filters.requestParams)
 
   React.useEffect(() => {
     if (!state.isLoading) {
@@ -28,7 +38,31 @@ const PlayersFilters = () => {
           <input className='input' placeholder='Search by name' value={search} onChange={({ target }) => setSearch(target.value)} />
         </div>
         <div className="control">
+          <PerPageSelect value={filters.perPage} onChange={filters.setPerPage} />
+        </div>
+        <div className="control">
           <a className='button is-primary' href={getExportUrl()} target="_blank">Export</a>
+        </div>
+        <div className="control">
+          <button
+            className='button is-info'
+            onClick={() => filters.prevPage()}
+            disabled={!filters.hasPrevPage()}
+          >
+            {'<'}
+          </button>
+        </div>
+        <div className="control">
+          <button className='button is-info' disabled={true}> {filters.currentPage + 1} </button>
+        </div>
+        <div className="control">
+          <button
+            className='button is-info'
+            onClick={() => filters.nextPage(state.players.length)}
+            disabled={!filters.hasNextPage(state.players.length)}
+          >
+            {'>'}
+          </button>
         </div>
       </div>
     </div>

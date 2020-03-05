@@ -36,7 +36,6 @@ const PlayersTable = () => {
   return (
     <div className='column'>
       {state.isLoading && <Loading />}
-      <h5 className='subtitle'>{state.players.length} results</h5>
       <Table
         rows={state.players}
         columns={TABLE_COLUMNS}

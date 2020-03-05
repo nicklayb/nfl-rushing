@@ -32,6 +32,16 @@ defmodule NflRushingWeb.PlayerRepositoryTest do
       assert [%Player{name: "Laurent Duvernay-Tardif"} | _] = by_rushing_touchdowns
       assert [%Player{name: "Patrick Mahomes"} | _] = by_longest_rush
     end
+
+    test("should paginate the players") do
+      players = mock_players()
+      [first, second, third] = PlayerRepository.all(players)
+
+      assert [^second] = PlayerRepository.all(players, %{"skip" => 1, "take" => 1})
+      assert [^first, ^second] = PlayerRepository.all(players, %{"take" => 2})
+      assert [^second, ^third] = PlayerRepository.all(players, %{"skip" => 1})
+      assert [^first, ^second, ^third] = PlayerRepository.all(players)
+    end
   end
 
   def mock_players do
